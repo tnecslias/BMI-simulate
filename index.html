@@ -1,206 +1,225 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BMIシミュレータ</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin-left: 300px;
+        height: auto;
+      }
 
-        body {
-            font-family: Arial, sans-serif;
-            margin-left:300px;
-            height:auto;
-        }
+      h1 {
+        color: #333;
+      }
 
-        h1 {
-            color: #333;
-        }
+      h3 {
+        padding: 0.4em 0.5em; /*文字の上下 左右の余白*/
+        color: #494949; /*文字色*/
+        background: #f4f4f4; /*背景色*/
+        border-left: solid 5px #7db4e6; /*左線*/
+        border-bottom: solid 3px #d7d7d7; /*下線*/
+        width: 200px;
+      }
 
-        h3{
-            padding: 0.4em 0.5em;/*文字の上下 左右の余白*/
-            color: #494949;/*文字色*/
-            background: #f4f4f4;/*背景色*/
-            border-left: solid 5px #7db4e6;/*左線*/
-            border-bottom: solid 3px #d7d7d7;/*下線*/
-            width:200px;
-        }
+      form {
+        margin-bottom: 20px;
+        margin-top: 20px;
+      }
 
-        form {
-            margin-bottom: 20px;
-            margin-top: 20px;
-        }
+      label {
+        margin-right: 10px;
+      }
 
-        label {
-            margin-right: 10px;
-        }
+      input {
+        margin-bottom: 10px;
+      }
 
-        input {
-            margin-bottom: 10px;
-        }
+      button {
+        margin-right: 10px;
+        margin-top: 5px;
+      }
 
-        button {
-            margin-right: 10px;
-            margin-top: 5px;
-        }
+      .container {
+        display: flex;
+      }
 
-        .container {
-            display: flex;
+      .result-container {
+        width: 800px;
+      }
 
-        }
+      table {
+        width: 50%;
+        border-collapse: collapse;
+        table-layout: fixed; /* テーブル幅を固定する */
+      }
 
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        width: 50%; /* セルの幅を50%に固定する */
+      }
 
-        .result-container{
-            width:800px;
-        }
+      th {
+        background-color: #f2f2f2;
+      }
 
-        table {
-            width: 50%;
-            border-collapse: collapse;
-            table-layout: fixed; /* テーブル幅を固定する */
-        }
+      .image-container {
+        text-align: center;
+        margin-left: -180px;
+        margin-top: -30px;
+      }
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-            width: 50%; /* セルの幅を50%に固定する */
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .image-container {
-            text-align: center;
-            margin-left: -180px;
-            margin-top: -30px;
-        }
-
-        .image-container img {
-            width: auto; /* 画像の幅を設定 */
-            height: 300px;
-        }
+      .image-container img {
+        width: auto; /* 画像の幅を設定 */
+        height: 300px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>BMIと適正体重</h1>
     <h3>BMIとは</h3>
-    <p>BMI（Body Mass Index）はボディマス指数と呼ばれ、体重と身長から算出される肥満度を表す体格指数です。<br>
-       子供には別の指数が存在しますが、成人ではBMIが国際的な指標として用いられています。<br>
-       健康を維持するためは日頃からBMIを把握することが重要です。</p>
+    <p>
+      BMI（Body Mass
+      Index）はボディマス指数と呼ばれ、体重と身長から算出される肥満度を表す体格指数です。<br />
+      子供には別の指数が存在しますが、成人ではBMIが国際的な指標として用いられています。<br />
+      健康を維持するためは日頃からBMIを把握することが重要です。
+    </p>
 
     <form id="bmiForm">
-        <label for="height">身長 (cm): </label>
-        <input type="number" id="height" required oninput="calculateBMI()"><br>
-        <label for="weight">体重 (kg): </label>
-        <input type="number" id="weight" required oninput="calculateBMI()"><br>
-        <button type="button" onclick="clearForm()">クリア</button>
+      <label for="height">身長 (cm): </label>
+      <input
+        type="number"
+        id="height"
+        required
+        oninput="calculateBMI()"
+      /><br />
+      <label for="weight">体重 (kg): </label>
+      <input
+        type="number"
+        id="weight"
+        required
+        oninput="calculateBMI()"
+      /><br />
+      <button type="button" onclick="clearForm()">クリア</button>
     </form>
 
     <div class="container">
-        <div class="result-container">
-            <h3>結果</h3>
-            <table>
-                <tr>
-                    <th>BMI</th>
-                    <td id="bmi">-</td>
-                </tr>
-                <tr>
-                    <th>判定</th>
-                    <td id="category">-</td>
-                </tr>
-                <tr>
-                    <th>適正体重 (kg)</th>
-                    <td id="idealWeight">-</td>
-                </tr>
-                <tr>
-                    <th>適正体重との差 (kg)</th>
-                    <td id="weightDifference">-</td>
-                </tr>
-            </table>
-        </div>
-        <div class="image-container">
-            <img id="categoryImage" src="/Users/honoka/Development/hal2024/JS22/05/kenkoushindan1_man_good.png" alt="">
-        </div>
+      <div class="result-container">
+        <h3>結果</h3>
+        <table>
+          <tr>
+            <th>BMI</th>
+            <td id="bmi">-</td>
+          </tr>
+          <tr>
+            <th>判定</th>
+            <td id="category">-</td>
+          </tr>
+          <tr>
+            <th>適正体重 (kg)</th>
+            <td id="idealWeight">-</td>
+          </tr>
+          <tr>
+            <th>適正体重との差 (kg)</th>
+            <td id="weightDifference">-</td>
+          </tr>
+        </table>
+      </div>
+      <div class="image-container">
+        <img
+          id="categoryImage"
+          src="/Users/honoka/Development/hal2024/JS22/05/kenkoushindan1_man_good.png"
+          alt=""
+        />
+      </div>
     </div>
 
     <script>
-        function calculateBMI() {
-            const height = parseFloat(document.getElementById('height').value);
-            const weight = parseFloat(document.getElementById('weight').value);
+      function calculateBMI() {
+        const height = parseFloat(document.getElementById("height").value);
+        const weight = parseFloat(document.getElementById("weight").value);
 
-            if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
-                document.getElementById('bmi').textContent = '-';
-                document.getElementById('idealWeight').textContent = '-';
-                document.getElementById('weightDifference').textContent = '-';
-                document.getElementById('category').textContent = '-';
-                document.getElementById('category').style.backgroundColor = ''; // 背景色をリセット
-                document.getElementById('categoryImage').src = '/Users/honoka/Development/hal2024/JS22/05/kenkoushindan1_man_good.png'; // 画像をリセット
-                return;
-            }
-
-            const heightInMeters = height / 100;
-            const bmi = weight / (heightInMeters * heightInMeters);
-            const idealWeight = 22 * (heightInMeters * heightInMeters);
-            const weightDifference = weight - idealWeight;
-
-            document.getElementById('bmi').textContent = bmi.toFixed(2);
-            document.getElementById('idealWeight').textContent = idealWeight.toFixed(2);
-            document.getElementById('weightDifference').textContent = weightDifference.toFixed(2);
-
-            let category = '';
-            let bgColor = '';
-            let imagePath = '';
-
-            if (bmi < 16.0) {
-                category = '痩せすぎ';
-                bgColor = '#FFB6C1'; // 薄い赤
-                imagePath = '/Users/honoka/Development/hal2024/JS22/05/taijukei5_yase_man.png'; 
-            } else if (bmi < 17.0) {
-                category = '痩せ';
-                bgColor = '#FFC0CB'; // ピンク
-                imagePath = '/Users/honoka/Development/hal2024/JS22/05/body_man_kyasya.png'; 
-            } else if (bmi < 18.5) {
-                category = '痩せ気味';
-                bgColor = '#FFD700'; // 金色
-                imagePath = '/Users/honoka/Development/hal2024/JS22/05/waist_woman_thin.png'; 
-            } else if (bmi < 25.0) {
-                category = '普通体重';
-                bgColor = '#90EE90'; // ライトグリーン
-                imagePath = '/Users/honoka/Development/hal2024/JS22/05/pose_genki03_man.png'; 
-            } else if (bmi < 30.0) {
-                category = '前肥満';
-                bgColor = '#FFA500'; // オレンジ
-                imagePath = '/Users/honoka/Development/hal2024/JS22/05/diet_before_woman.png'; 
-            } else if (bmi < 35.0) {
-                category = '肥満（１度）';
-                bgColor = '#FF8C00'; // ダークオレンジ
-                imagePath = '/Users/honoka/Development/hal2024/JS22/05/himan03_youngman.png'; 
-            } else if (bmi < 40.0) {
-                category = '肥満（２度）';
-                bgColor = '#FF4500'; // オレンジレッド
-                imagePath = '/Users/honoka/Development/hal2024/JS22/05/himan01_boy.png'; 
-            } else {
-                category = '肥満（３度）';
-                bgColor = '#FF0000'; // 赤
-                imagePath = '/Users/honoka/Development/hal2024/JS22/05/metabolic_man.png'; 
-            }
-
-            document.getElementById('category').textContent = category;
-            document.getElementById('category').style.backgroundColor = bgColor;
-            document.getElementById('categoryImage').src = imagePath;
+        if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+          document.getElementById("bmi").textContent = "-";
+          document.getElementById("idealWeight").textContent = "-";
+          document.getElementById("weightDifference").textContent = "-";
+          document.getElementById("category").textContent = "-";
+          document.getElementById("category").style.backgroundColor = ""; // 背景色をリセット
+          document.getElementById("categoryImage").src =
+            "/Users/honoka/Development/hal2024/JS22/05/kenkoushindan1_man_good.png"; // 画像をリセット
+          return;
         }
 
-        function clearForm() {
-            document.getElementById('bmiForm').reset();
-            document.getElementById('bmi').textContent = '-';
-            document.getElementById('idealWeight').textContent = '-';
-            document.getElementById('weightDifference').textContent = '-';
-            document.getElementById('category').textContent = '-';
-            document.getElementById('category').style.backgroundColor = ''; // 背景色をリセット
-            document.getElementById('categoryImage').src = '/Users/honoka/Development/hal2024/JS22/05/kenkoushindan1_man_good.png'; // 画像をリセット
+        const heightInMeters = height / 100;
+        const bmi = weight / (heightInMeters * heightInMeters);
+        const idealWeight = 22 * (heightInMeters * heightInMeters);
+        const weightDifference = weight - idealWeight;
+
+        document.getElementById("bmi").textContent = bmi.toFixed(2);
+        document.getElementById("idealWeight").textContent =
+          idealWeight.toFixed(2);
+        document.getElementById("weightDifference").textContent =
+          weightDifference.toFixed(2);
+
+        let category = "";
+        let bgColor = "";
+        let imagePath = "";
+
+        if (bmi < 16.0) {
+          category = "痩せすぎ";
+          bgColor = "#FFB6C1"; // 薄い赤
+          imagePath = "taijukei5_yase_man.png";
+        } else if (bmi < 17.0) {
+          category = "痩せ";
+          bgColor = "#FFC0CB"; // ピンク
+          imagePath = "body_man_kyasya.png";
+        } else if (bmi < 18.5) {
+          category = "痩せ気味";
+          bgColor = "#FFD700"; // 金色
+          imagePath = "waist_woman_thin.png";
+        } else if (bmi < 25.0) {
+          category = "普通体重";
+          bgColor = "#90EE90"; // ライトグリーン
+          imagePath = "pose_genki03_man.png";
+        } else if (bmi < 30.0) {
+          category = "前肥満";
+          bgColor = "#FFA500"; // オレンジ
+          imagePath = "diet_before_woman.png";
+        } else if (bmi < 35.0) {
+          category = "肥満（１度）";
+          bgColor = "#FF8C00"; // ダークオレンジ
+          imagePath = "himan03_youngman.png";
+        } else if (bmi < 40.0) {
+          category = "肥満（２度）";
+          bgColor = "#FF4500"; // オレンジレッド
+          imagePath = "himan01_boy.png";
+        } else {
+          category = "肥満（３度）";
+          bgColor = "#FF0000"; // 赤
+          imagePath = "metabolic_man.png";
         }
+
+        document.getElementById("category").textContent = category;
+        document.getElementById("category").style.backgroundColor = bgColor;
+        document.getElementById("categoryImage").src = imagePath;
+      }
+
+      function clearForm() {
+        document.getElementById("bmiForm").reset();
+        document.getElementById("bmi").textContent = "-";
+        document.getElementById("idealWeight").textContent = "-";
+        document.getElementById("weightDifference").textContent = "-";
+        document.getElementById("category").textContent = "-";
+        document.getElementById("category").style.backgroundColor = ""; // 背景色をリセット
+        document.getElementById("categoryImage").src =
+          "/Users/honoka/Development/hal2024/JS22/05/kenkoushindan1_man_good.png"; // 画像をリセット
+      }
     </script>
-</body>
+  </body>
 </html>
